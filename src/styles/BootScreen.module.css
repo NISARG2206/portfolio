@@ -1,0 +1,81 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 999;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.logContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 640px;
+  margin-left: clamp(1rem, 8vw, 6rem);
+}
+
+.logLine {
+  font-size: clamp(0.78rem, 1.6vw, 0.92rem);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: logReveal 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  white-space: nowrap;
+}
+
+.morphLine {
+  opacity: 1;
+  transform: none;
+  animation: none;
+  transform-origin: left center;
+  z-index: 2;
+}
+
+.logFadeOut {
+  animation: logDismiss 0.35s ease forwards;
+}
+
+@keyframes logReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logDismiss {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.accent {
+  color: var(--accent-primary);
+}
+
+/* Clip-path wipe — reveals dossier beneath */
+.wipeOut {
+  animation: wipe 0.85s cubic-bezier(0.76, 0, 0.24, 1) 0.55s forwards;
+}
+
+@keyframes wipe {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    display: none;
+  }
+}

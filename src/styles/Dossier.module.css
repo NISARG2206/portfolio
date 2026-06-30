@@ -1,0 +1,323 @@
+.dossierWrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-sizing: border-box;
+}
+
+.dossierContent {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: minmax(56px, 80px) minmax(0, 1fr) minmax(180px, 240px);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  max-width: var(--max-width);
+  width: 100%;
+  margin: auto;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.settled .dossierContent,
+.morphing .dossierContent {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Left column — rotated dossier identifiers */
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.5rem;
+  height: 100%;
+  justify-content: center;
+}
+
+.fileNumber {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.statusTag {
+  border: 1px solid var(--accent-primary);
+  background: var(--accent-faded);
+  color: var(--accent-primary);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.55rem 0.3rem;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Main column */
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  padding-right: clamp(0rem, 3vw, 2rem);
+}
+
+.nameTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 9vw, 6.75rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  margin: 0;
+  transition: opacity 0.5s ease;
+}
+
+.namePending {
+  opacity: 0;
+}
+
+.nameVisible {
+  opacity: 1;
+  animation: nameResolve 0.85s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes nameResolve {
+  from {
+    letter-spacing: 0.08em;
+    filter: blur(2px);
+  }
+  to {
+    letter-spacing: -0.04em;
+    filter: blur(0);
+  }
+}
+
+.statement {
+  font-family: var(--font-sans);
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 38rem;
+  letter-spacing: -0.01em;
+  border-left: 2px solid var(--border-color);
+  padding-left: 1.25rem;
+}
+
+.actionStamp {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  border-bottom: 2px solid var(--accent-primary);
+  padding-bottom: 3px;
+  transition: var(--transition-smooth);
+  margin-top: 0.5rem;
+}
+
+.actionStamp:hover {
+  color: var(--text-primary);
+  border-bottom-color: var(--text-primary);
+  transform: translateX(5px);
+}
+
+/* Right column — declassified metadata */
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+  border-left: 1px solid var(--border-color);
+  padding-left: clamp(1.25rem, 3vw, 2.5rem);
+  justify-content: center;
+  height: 100%;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.metaHeader {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.metaValue {
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.metaRedacted {
+  position: relative;
+  display: inline-block;
+  padding: 0.15rem 0;
+}
+
+.metaRedacted::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--text-muted) 0,
+    var(--text-muted) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 0.6s ease 0.3s;
+}
+
+.settled .metaRedacted::before,
+.morphing .metaRedacted::before {
+  opacity: 0;
+}
+
+.metaReveal {
+  position: relative;
+  z-index: 1;
+}
+
+.metaNote {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  opacity: 0.7;
+}
+
+/* Live monitor widget */
+.liveWidget {
+  position: absolute;
+  top: clamp(1.25rem, 3vw, 2rem);
+  right: clamp(1.25rem, 3vw, 2rem);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  z-index: 100;
+}
+
+.liveText {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.pulseDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-primary);
+  animation: pulse 3s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.35;
+  }
+}
+
+.pulseWave {
+  width: 36px;
+  height: 14px;
+  color: var(--accent-primary);
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dossierContent,
+  .nameTitle,
+  .metaRedacted::before {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+
+  .namePending {
+    opacity: 1;
+  }
+
+  .pulseDot {
+    animation: none;
+  }
+}
+
+@media (max-width: 968px) {
+  .dossierContent {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-top: 4.5rem;
+  }
+
+  .leftColumn {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.25rem;
+    height: auto;
+  }
+
+  .fileNumber,
+  .statusTag {
+    writing-mode: horizontal-tb;
+    transform: none;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .rightColumn {
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    padding-left: 0;
+    padding-top: 1.75rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.75rem;
+  }
+}
